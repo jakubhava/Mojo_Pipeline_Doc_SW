@@ -105,12 +105,12 @@ submit our job to a cluster.
 
 .. code:: scala
 
-	# Load the data as Spark's Data Frame
+	// Load the data as Spark's Data Frame
     val dataFrame = spark.read.option("header", "true").csv("file:///path/to/the/data.csv")
 
 .. code:: scala
 
-	# Run the predictions. The predictions contain all the original columns plus the predictions added as new columns
+	// Run the predictions. The predictions contain all the original columns plus the predictions added as new columns
 	val predictions = mojo.transform(dataFrame)
-	# We can easily get the predictions for desired column using the helper function as
+	// We can easily get the predictions for desired column using the helper function as
 	predictions.select(mojo.selectPredictionUDF("AGE"))
