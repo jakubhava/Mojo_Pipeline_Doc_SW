@@ -27,21 +27,21 @@ First, let's start Spark with all the required dependencies
 
 
 
- .. code:: bash
+.. code:: bash
 
-	./bin/pyspark --jars license.sig,mojo-pipeline-impl.jar --py-files pysparkling.zip
+    ./bin/pyspark --jars license.sig,mojo-pipeline-impl.jar --py-files pysparkling.zip
 
 We can see that we passed the license and mojo pipeline implementation library to the ``--jars`` argument and also specified path
 to the PySparkling python library. At this point, we should have available PySpark interactive terminal where we can try our predictions. In case you would like
 to productionalize this, you can use the same configuration except instead of using ``./bin/pyspark`` you would use ``./bin/spark-submit`` to
 submit your job to a cluster.
 
- .. code:: python
+.. code:: python
 	
 	# First, specify the dependency
 	from pysparkling.ml import H2OMOJOPipelineModel
 
- .. code:: python
+.. code:: python
 
 	# Load the pipeline
 	mojo = H2OMOJOPipelineModel.create_from_mojo("file:///path/to/the/pipeline.mojo")
@@ -50,12 +50,12 @@ submit your job to a cluster.
 	# or set it to False. We however strongly encourage users to use
 	mojo.set_named_mojo_output_columns(True)
 
- .. code:: python
+.. code:: python
 
 	# Load the data as Spark's Data Frame
 	data_frame = self._spark.read.csv("file:///path/to/the/data.csv", header=True)
 
- .. code:: python
+.. code:: python
 
 	# Run the predictions. The predictions contain all the original columns plus the predictions added as new columns
 	predictions = mojo.predict(data_frame)
