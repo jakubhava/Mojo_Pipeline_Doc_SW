@@ -26,15 +26,18 @@ PySparkling
 First, let's start Spark with all the required dependencies
 
 
-
 .. code:: bash
 
     ./bin/pyspark --jars license.sig,mojo-pipeline-impl.jar --py-files pysparkling.zip
 
 We can see that we passed the license and mojo pipeline implementation library to the ``--jars`` argument and also specified path
-to the PySparkling python library. At this point, we should have available PySpark interactive terminal where we can try our predictions. In case you would like
-to productionalize this, you can use the same configuration except instead of using ``./bin/pyspark`` you would use ``./bin/spark-submit`` to
-submit your job to a cluster.
+to the PySparkling python library.
+
+At this point, we should have available PySpark interactive terminal where we can try our predictions. In case we would like
+to productionalize the scoring process, we can use the same configuration except instead of using ``./bin/pyspark``, we would
+use ``./bin/spark-submit`` to submit our job to a cluster.
+
+
 
 .. code:: python
 	
@@ -45,7 +48,7 @@ submit your job to a cluster.
 
 	# Load the pipeline
 	mojo = H2OMOJOPipelineModel.create_from_mojo("file:///path/to/the/pipeline.mojo")
-	# This option ensures that the output columns are named properly. If you want to use old behaviour
+	# This option ensures that the output columns are named properly. If we want to use old behaviour
 	# when all output columns were stored inside and array, don't specify this configuration option
 	# or set it to False. We however strongly encourage users to use
 	mojo.set_named_mojo_output_columns(True)
@@ -65,3 +68,45 @@ submit your job to a cluster.
 
 Sparkling Water
 ---------------
+
+First, let's start Spark with all the required dependencies
+
+
+.. code:: bash
+
+    ./bin/spark-shell --jars license.sig,mojo-pipeline-impl.jar,sparkling-water-assembly.jar
+
+We can see that we passed the license and mojo pipeline implementation library to the ``--jars`` argument and also specified path
+to the Sparkling Water assembly JAR.
+
+At this point, we should have available PySpark interactive terminal where we can try our predictions. In case we would like
+to productionalize the scoring process, we can use the same configuration except instead of using ``./bin/spark-shell``, we would use ``./bin/spark-submit`` to
+submit our job to a cluster.
+
+
+
+.. code:: scala
+
+	// First, specify the dependency
+	import org.apache.spark.ml.h2o.models.H2OMOJOPipelineModel
+
+.. code:: scala
+
+	// Load the pipeline
+	val mojo = H2OMOJOPipelineModel.createFromMojo("file:///path/to/the/pipeline.mojo")
+	// This option ensures that the output columns are named properly. If you want to use old behaviour
+	// when all output columns were stored inside and array, don't specify this configuration option
+	// or set it to False. We however strongly encourage users to use
+	mojo.setNamedMojoOutputColumns(true)
+
+.. code:: scala
+
+	# Load the data as Spark's Data Frame
+    val dataFrame = spark.read.option("header", "true").csv("file:///path/to/the/data.csv")
+
+.. code:: scala
+
+	# Run the predictions. The predictions contain all the original columns plus the predictions added as new columns
+	val predictions = mojo.transform(dataFrame)
+	# We can easily get the predictions for desired column using the helper function as
+	predictions.select(mojo.selectPredictionUDF("AGE"))
