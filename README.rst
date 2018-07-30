@@ -7,7 +7,11 @@ The user needs to have Spark cluster with Sparkling Water JAR file passed to Spa
 The H2OContext does not have to be created in case we want to run only predictions on mojos using Spark as they are written to be independent
 on the H2O run-time.
 
-The following sections show how to load and run predictions on Mojo Pipeline in Spark using Scala and Python API
+The following sections show how to load and run predictions on Mojo Pipeline in Spark using Scala and Python API.
+
+In case you are upgrading H2O Driverless AI, we have a good news. Sparkling Water is backwards compatible
+with mojo versions produced by older Driverless AI versions.
+
 
 Preparing Environment
 ---------------------
